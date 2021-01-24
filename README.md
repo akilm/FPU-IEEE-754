@@ -32,8 +32,8 @@ Synthesizable Floating point unit written using Verilog. Supports 32-bit (Single
         C = 1/ 2^(-0.5) is already known and multiplied at the end
         Y =  M* 2^(126-127)) ^ 0.5 is computed using Newton Raphson Iterations and Inserted in the equation
         thus X becomes -> X = Y*C
-        2^(E/2) is basically exponent adjust and based on the value of E (Multiple of 2 or not), The resulting
-        expression is multiplied by 2^(0.5) if the exponent is not a multiple of 2.
+        2^(E/2) is basically exponent adjust and based on the value of E (Multiple of 2 or not).
+        The resulting expression is multiplied by 2^(0.5) if the exponent is not a multiple of 2.
         values readjusted at the end.
         Intial Seed : x0 = 0.853553414345
         Newton Raphson Iterations :
@@ -41,6 +41,7 @@ Synthesizable Floating point unit written using Verilog. Supports 32-bit (Single
                       x2 = 0.5*(x1 + X/x1)
                       x3 = 0.5*(x2 + X/x2)
 
-        the exponent value of x3 is adjusted and multiplied with sqrt(2) if necessary to produce the final result.
+        the exponent value of x3 is adjusted and multiplied with sqrt(2) if necessary to produce the 
+        final result.
     ```
 **Note** : Rounding for all the modules in progress, currently the Least significant Bits are truncated to fit the field size.
