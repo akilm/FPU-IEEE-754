@@ -17,5 +17,30 @@ Synthesizable Floating point unit written using Verilog. Supports 32-bit (Single
         1/B : {B[31],x3[30:23]+8'd126-B[30:23],x3[22:0]}
         Final Value A*1/B
     ```
+- FloatingSqrt.v :  Uses **Newton Raphson** Iterations to find the square root  
+    ```
+    Square root Algorithm : A^0.5
+        A split into two parts -> M * 2^E
+        A ^ 0.5 = (M * 2^E) ^ 0.5
+                = M^0.5 * 2^(E/2)
+        X = M^0.5 ; Z = 2^(E/2)
+    M adjusted to fit the range 0.5-1 by replacing exponent with 8'd126 (actual exponent = 126-127 = -1).
+        X = ( M * 1 )^0.5
+        X = ( M * 2^(126-127) / 2^(126-127) ) ^0.5
+        X = ( M* 2^(126-127)) ^ 0.5 / 2^(-0.5)
+        X = ( M* 2^(126-127)) ^ 0.5 * 1/ 2^(-0.5)
+        C = 1/ 2^(-0.5) is already known and multiplied at the end
+        Y =  M* 2^(126-127)) ^ 0.5 is computed using Newton Raphson Iterations and Inserted in the equation
+        thus X becomes -> X = Y*C
+        2^(E/2) is basically exponent adjust and based on the value of E (Multiple of 2 or not), The resulting
+        expression is multiplied by 2^(0.5) if the exponent is not a multiple of 2.
+        values readjusted at the end.
+        Intial Seed : x0 = 0.853553414345
+        Newton Raphson Iterations :
+                      x1 = 0.5*(x0 + X/x0)
+                      x2 = 0.5*(x1 + X/x1)
+                      x3 = 0.5*(x2 + X/x2)
 
+        the exponent value of x3 is adjusted and multiplied with sqrt(2) if necessary to produce the final result.
+    ```
 **Note** : Rounding for all the modules in progress, currently the Least significant Bits are truncated to fit the field size.
